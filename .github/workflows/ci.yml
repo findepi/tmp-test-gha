@@ -55,7 +55,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: "test"
-        run: "true"
+        run: |
+          test $[RANDOM % 3] -eq 0
 
   cs:
     runs-on: ubuntu-latest
