@@ -23,7 +23,7 @@ concurrency:
 
 jobs:
   build-success:
-    if: ${{ !success() }} # if `failure()` would not work for cancellations
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     needs:
       [
@@ -32,7 +32,12 @@ jobs:
         cs,
       ]
     steps:
-      - run: false
+      - name: "Check results"
+        run: |
+          set -x
+          echo '${{ needs.amt.result }}' | grep -xE 'success|skipped' || { echo 'amt failed' >&2; exit 1; }
+          echo '${{ needs.b.result }}' | grep -xE 'success|skipped' || { echo 'b failed' >&2; exit 1; }
+          echo '${{ needs.cs.result }}' | grep -xE 'success|skipped' || { echo 'cs failed' >&2; exit 1; }
 
   amt:
     runs-on: ubuntu-latest
@@ -50,7 +55,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: "test"
-        run: "true"
+        run: |
+          test $[RANDOM % 3] -eq 0
 
   cs:
     runs-on: ubuntu-latest
@@ -58,4 +64,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: "test"
-        run: "true"
+        run: "false"
