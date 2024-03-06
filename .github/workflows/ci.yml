@@ -35,9 +35,9 @@ jobs:
       - name: "Check results"
         run: |
           set -x
-          echo '${{ needs.amt.result }}' | grep -x 'success|skipped' || { echo 'amt failed' >&2; exit 1; }
-          echo '${{ needs.b.result }}' | grep -x 'success|skipped' || { echo 'b failed' >&2; exit 1; }
-          echo '${{ needs.cs.result }}' | grep -x 'success|skipped' || { echo 'cs failed' >&2; exit 1; }
+          echo '${{ needs.amt.result }}' | grep -xE 'success|skipped' || { echo 'amt failed' >&2; exit 1; }
+          echo '${{ needs.b.result }}' | grep -xE 'success|skipped' || { echo 'b failed' >&2; exit 1; }
+          echo '${{ needs.cs.result }}' | grep -xE 'success|skipped' || { echo 'cs failed' >&2; exit 1; }
 
   amt:
     runs-on: ubuntu-latest
